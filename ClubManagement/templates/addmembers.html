@@ -1,0 +1,54 @@
+{% extends "d.html" %}
+{% load static %}
+
+{% block style %}
+
+.amembers
+{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    height:90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size:cover;
+    background-repeat: no-repeat;
+    padding:3%;
+}
+
+.ahello
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+    display:flex;
+    align-items:center;
+    font-size:3vw;
+}
+
+.atable
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+    display:flex;
+    align-items:end;
+    justify-content:center;
+}
+
+{% endblock style %}
+
+{% block body %}
+
+    <div class="amembers">
+        <div class="ahello">
+           <img class="p-3" style="width:7vw; height:auto;" src="{% static '2_mem.png'%}" alt="I">
+            Add Members
+        </div>
+        <div class="atable">
+            <a href="/addmembers">
+                <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
+                    Add Members
+                </button>
+            </a>
+        </div>
+    </div>
+{% endblock body %}

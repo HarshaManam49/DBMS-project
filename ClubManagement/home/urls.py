@@ -21,5 +21,14 @@ urlpatterns = [
     path("", views.index,name='index'),
     path("signin", views.signin,name='signin'),
     path("contact", views.contact,name='contact'),
-    path("about", views.about,name='about')
+    path("about", views.about,name='about'),
+    path("dashboard",views.dashboard,name='dashboard'),
+    path("clubmembers",views.clubmembers,name='clubmembers'),
+    path("addmembers",views.addmembers,name='addmembers'),
+    path("eventslist",views.eventslist,name='eventslist'),
+    path("addevents",views.addevents,name='addevents'),
+    path("clubtimeline",views.clubtimeline,name='clubtimeline'),
+    path("requestOd",views.requestOd,name='requestOd'),
+    path("login", views.signin,name='signin'),
+    path("logout", views.signout,name='signout'),
 ]

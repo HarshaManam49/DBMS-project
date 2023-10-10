@@ -11,7 +11,7 @@ body {
 .cont{
    display: grid;
    background-color: #7fffd4;
-   grid-template-columns: 1fr 1fr 1.5fr;
+   grid-template-columns: 1fr 1fr;
    grid-template-rows: 1fr 1fr;
    clip-path: polygon(0 0, 100% 0, 100% 100%, 53% 100%, 0 69%);
    background: linear-gradient(300deg, #2b6ab3, #f6ffff, #2b6ab3);
@@ -33,7 +33,6 @@ body {
    }
 }
 
-
 .item
 {
    display: flex;
@@ -43,7 +42,6 @@ body {
 
 .info
 {
-   grid-column: span 2;
    grid-row: span 2;
    flex-direction: column;
 }
@@ -52,18 +50,32 @@ body {
 .content{
    padding-left:100px;
    padding-right:100px;
+   padding-bottom:30px
+}
+
+.cont button{
+   padding-left:60px;
+   padding-right:60px;
+   width: 180px; 
+   height: 40px;
+   border-radius: 50px; 
 }
 
 .i
-{
-   margin-top: -150px;
+{  
    grid-row: span 2;
+}
+
+.i img
+{
+   height:50%;
+   width:70%;
 }
 
 .about
 {
    display: grid;
-   grid-template-columns: 1fr 1fr 1.5fr;
+   grid-template-columns: 1fr 1fr;
    grid-template-rows: 1fr 1fr;
    height: 85vh;
    font-weight: 100;        
@@ -71,8 +83,7 @@ body {
 
 .about img
 {
-   width:500px;
-
+   width:75%;
 }
 
 .features
@@ -113,50 +124,94 @@ body {
 {
    background:white;
    border-radius:50%;
-   width: 50px;
-   height: 50px;
+   height:10%;
+   width:10%;
    display:flex;
    align-items:center;
    justify-content:center;
-   font-size:22px;
+   font-size:1.5vw;
    padding-top:10px;
 }
+
+.watch
+{
+   background:#DAE5FA;
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   grid-template-rows: 1fr 1fr;
+   height:85vh;
+}
+
+.witem
+{
+   display:flex;
+   justify-content:center;
+   align-items: center;
+
+}
+
+.timeline{
+   grid-row:span 2;
+}
+
+.timeline img
+{
+   width:80%;
+   height:70%;
+}
+
+.wcontent
+{
+   flex-direction:column;
+   align-self:center;
+}
+
+.stairs
+{
+   width:90%;
+   height:100%;
+}
+
 {% endblock %}
 
 
 {% block body %}
    <div class="cont" id="home">
       <div class="item info">
-        <p style="font-size: 90px; font-family:Arial;">Club Management</p>
-        <div class=" content">
+        <p style="font-size: 5vw; font-family:Arial;">Club Management</p>
+        <div style="font-size: 1vw;"class=" content">
          A cutting-edge management for your top-notch clubs. 
          Anytime Anywhere..        </div>
-         <button type="button" class="btn btn-primary mt-1">Login</button>
+         <a href="/dashboard">
+            <button type="button" class="btn btn-primary mt-1" id="login-btn">
+            Login
+            </button>
+         </a>
       </div>
-      <div class= "item i mt-2"><img src="{% static 'club_logo.png' %}" alt="I"></div>
+      <div class= "item i mt-2"><img src="{% static 'club.png' %}" alt="I"></div>
   </div>
 
   <div class="about" id="about">
       <div class="item info">
-         <p style="font-size: 50px; font-family:Verdana, Geneva, Tahoma, sans-serif;">Say Hello to C-Age</p>
+         <p style="font-size: 4vw; font-family:Verdana, Geneva, Tahoma, sans-serif;">Say Hello to C-Age</p>
          <div class="content">
             Your mission our plan, your team our management.
             At C-Age we work daily to build an efficient and easy way for managing the clubs. Inter club events, time slot for sessions, On-Duty for members can be done now in fingertips.
          </div>
       </div>
-      <div class="item i "><img src="{% static 'about.png' %}" alt="I"></div>
+      <div class="item"><img src="{% static 'about.png' %}" alt="I"></div>
    </div>
 
    <div class="features">
       <div class="fcontent">
-         <p class="pl-5" style="font-size: 50px; font-family:Arial;">C-Age's Best Features</p>
+         <p class="pl-5" style="font-size: 4vw; font-family:Arial;">C-Age's Best Features</p>
       </div>
       <div class="fitem f1">
          <div class="circle cnum1">
             <p>01</p>
          </div>
          <div>
-            <p class="p-5" style="font-size:20px; color:white;">Time Slot Management: The time and date of each event is noted to show the free slots to conduct any other event/club sessions.</p>
+            <p class="p-5" style="font-size:1.5vw; color:white;">Time Slot Management: The time and date of each event is noted to show the free slots to conduct any other event/club sessions.</p>
          </div>
       </div>
       <div class="fitem f2">
@@ -164,7 +219,7 @@ body {
             <p>02</p>
          </div>
          <div>
-            <p class="p-5" style="font-size: 20px; color:white;">On Duty List: The On-Duty list of members can now be sent directly to the faculty for consideration.</p>
+            <p class="p-5" style="font-size: 1.5vw; color:white;">On Duty List: The On-Duty list of members can now be sent directly to the faculty for consideration.</p>
          </div>
       </div>
       <div class="fitem f3">
@@ -172,9 +227,18 @@ body {
             <p>03</p>
          </div>
          <div>
-            <p class="p-5" style="font-size: 20px; color:white;">The communication between managing council, event faculty coordinator and the volunteers/members is now made easy.</p>
+            <p class="p-5" style="font-size: 1.5vw; color:white;">The communication between managing council, event faculty coordinator and the volunteers/members is now made easy.</p>
          </div>
       </div>
 
+   </div>
+
+   <div class="watch">
+      <div class= "witem timeline"><img src="{% static 'timeline.png' %}" alt="I"></div> 
+      <div class="witem wcontent">
+         <p style="font-size:3vw">Watch Your Club grow</p>
+         <div style="font-size:1vw">Watch the timeline of events organised in your club, the pending works for each event and many more!</div>
+      </div>
+      <img class="stairs" src="{% static 'stairs.png' %}" alt="I">
    </div>
 {% endblock %}
