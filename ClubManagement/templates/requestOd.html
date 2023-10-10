@@ -3,7 +3,7 @@
 
 {% block style %}
 
-.cbtimeline
+.rod
 {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -16,7 +16,7 @@
     padding:3%;
 }
 
-.cbhello
+.rhello
 {
     grid-column:span 2;
     border: 2px solid #171616;
@@ -25,26 +25,30 @@
     font-size:3vw;
 }
 
-.cbtable
+.rtable
 {
     grid-column:span 2;
+    border: 2px solid #171616;
     display:flex;
-    align-items:center;
-    justify-content:space-around;
-    font-size:3vw;
+    align-items:end;
+    justify-content:center;
 }
 
 {% endblock style %}
 
 {% block body %}
 
-    <div class="cbtimeline">
-        <div class="cbhello">
-           <img class="p-3" style="width:7vw; height:auto;" src="{% static '3_dashtime.png'%}" alt="I">
-            Club Timeline
+    <div class="rod">
+        <div class="rhello">
+           <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
+            Request OnDuty
         </div>
-        <div class="cbtable">
-            Media Club
+        <div class="rtable">
+            <a href="">
+                <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
+                    Request
+                </button>
+            </a>
         </div>
     </div>
 {% endblock body %}
