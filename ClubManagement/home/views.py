@@ -7,8 +7,6 @@ from django.contrib import messages
 from datetime import datetime
 # Create your views here.
 def index(request):
-    if request.user.is_anonymous:
-        return redirect("/signin")
     return render(request,'index.html')
 def signin(request):
     if request.method=="POST":
@@ -20,14 +18,14 @@ def signin(request):
 
         if user is not None:
             login(request,user)
-            return redirect("/")
+            return render(request,'dashboard.html')
         else:
             print("yes")
             return render(request,"signin.html")
     return render(request,'signin.html')
 def signout(request):
     logout(request)
-    return redirect("/signin")
+    return redirect("/")
 def contact(request):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -38,5 +36,5 @@ def contact(request):
         contact.save()
         messages.success(request, 'Your message has been sent!')
     return render(request,'contact.html')
-def about(request):
-    return render(request,'about.html')
+def dashboard(request):
+    return render(request,'dashboard.html')
