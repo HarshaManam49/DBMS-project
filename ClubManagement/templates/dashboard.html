@@ -1,0 +1,45 @@
+{% extends "d.html" %}
+{% load static %}
+{% block style %}
+
+
+.dash1
+{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr 1fr;
+    height:90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size:cover;
+    background-repeat: no-repeat;
+    padding:3%;
+}
+.hello {
+    grid-column: span 2;
+    border: 2px solid #171616;
+}
+
+.clubcoor {
+    grid-row: span 2;
+    border: 2px solid #171616;
+}
+
+.clubfac,
+.recentevent {
+    border: 2px solid #171616;
+}
+
+{% endblock %}
+
+
+{% block body %}
+    
+    <div class="dash1"> 
+        <div class="hello" href="#"> Hello!ABC Club</div>
+        <div class="clubcoor" href="#">Club Coordinators:</div>
+        <div class="clubfac" href="#">Club Faculty Incharge:</div>
+        <div class="recentevent" href="#">Recent Events:</div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "d.html" %}
+{% load static %}
+
+{% block style %}
+
+.rod
+{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    height:90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size:cover;
+    background-repeat: no-repeat;
+    padding:3%;
+}
+
+.rhello
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+    display:flex;
+    align-items:center;
+    font-size:3vw;
+}
+
+.rtable
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+    display:flex;
+    align-items:end;
+    justify-content:center;
+}
+
+{% endblock style %}
+
+{% block body %}
+
+    <div class="rod">
+        <div class="rhello">
+           <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
+            Request OnDuty
+        </div>
+        <div class="rtable">
+            <a href="">
+                <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
+                    Request
+                </button>
+            </a>
+        </div>
+    </div>
+{% endblock body %}
