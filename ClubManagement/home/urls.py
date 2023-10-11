@@ -29,7 +29,8 @@ urlpatterns = [
     path("eventslist",views.eventslist,name='eventslist'),
     path("addevents",views.addevents,name='addevents'),
     path("clubtimeline",views.clubtimeline,name='clubtimeline'),
-    path("requestOd",views.requestOd,name='requestOd'),
+    path("requestOd",views.requestOnDuty,name='requestOd'),
+    path("approval",views.approval,name='approval'),
     path("login", views.signin,name='signin'),
     path("logout", views.signout,name='signout'),
 ]

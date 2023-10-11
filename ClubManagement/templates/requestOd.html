@@ -43,12 +43,44 @@
            <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
             Request OnDuty
         </div>
-        <div class="rtable">
+        {% comment %} <div class="rtable">
             <a href="">
                 <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
                     Request
                 </button>
             </a>
-        </div>
+        </div> {% endcomment %}
     </div>
+    <form method="post" id="duty-request-form" action="/requestOd">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+            <thead>
+                <tr>
+                    <th>Club</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                    {{ form.as_table }}
+                {% endfor %}
+            </tbody>
+        </table>
+        <button id="add-student">Add Student</button>  <!-- Moved inside the form -->
+        <button type="submit">Submit Requests</button>
+    </form>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const formset = document.querySelector("#duty-request-form tbody");
+            const addStudentButton = document.querySelector("#add-student");
+    
+            addStudentButton.addEventListener("click", function () {
+                const newRow = formset.insertRow(-1);  // Insert a new row at the end of the table
+                newRow.innerHTML = formset.rows[0].innerHTML;  // Clone the first row
+            });
+        });
+    </script>
 {% endblock body %}

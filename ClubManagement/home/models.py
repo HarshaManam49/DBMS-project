@@ -1,5 +1,6 @@
 from django.db import models,connection
-
+from django import forms
+from .models import *
 # makemigrations - create changes and store in a file 
 # migrate - apply the pending changes created by makemigrations
 
@@ -498,6 +499,12 @@ class ClubIdentifier(models.Model):
     username=models.CharField(max_length=122,primary_key=True)
     club_name=models.CharField(max_length=122)
     choices=[
+        ("cultural","cultural"),
+        ("technical","technical"),
+        ("sports","sports")
+    ]
+    club_type=models.CharField(max_length=122,choices=choices)
+    choices=[
         ("FI","Faculty Incharge"),
         ("SC","Student Council"),
         ("C","Club")
@@ -510,3 +517,78 @@ class ClubIdentifier(models.Model):
             cursor.execute("SELECT * FROM home_clubidentifier")
             records=cursor.fetchall()
         return records
+
+class OnDutyRequestSCCultural(models.Model):
+    student_roll_no=models.CharField(max_length=6)
+    date_of_od=models.DateField()
+    course_code=models.CharField(max_length=7)
+    faculty_name=models.TextField(max_length=1000)
+    reason=models.CharField(max_length=122)
+    # choices=[
+    #     ("cultural","cultural"),
+    #     ("technical","technical"),
+    #     ("sports","sports")
+    # ]
+    # type_of_club=models.CharField(max_length=122,choices=choices)
+class OnDutyRequestSCTechnical(models.Model):
+    student_roll_no=models.CharField(max_length=6)
+    date_of_od=models.DateField()
+    course_code=models.CharField(max_length=7)
+    faculty_name=models.TextField(max_length=1000)
+    reason=models.CharField(max_length=122)
+    # choices=[
+    #     ("cultural","cultural"),
+    #     ("technical","technical"),
+    #     ("sports","sports")
+    # ]
+    # type_of_club=models.CharField(max_length=122,choices=choices)
+class OnDutyRequestSCSports(models.Model):
+    student_roll_no=models.CharField(max_length=6)
+    date_of_od=models.DateField()
+    course_code=models.CharField(max_length=7)
+    faculty_name=models.TextField(max_length=1000)
+    reason=models.CharField(max_length=122)
+    # choices=[
+    #     ("cultural","cultural"),
+    #     ("technical","technical"),
+    #     ("sports","sports")
+    # ]
+    # type_of_club=models.CharField(max_length=122,choices=choices)
+
+class OnDutyRequestClubCultural(models.Model):
+    student_roll_no=models.CharField(max_length=6)
+    date_of_od=models.DateField()
+    course_code=models.CharField(max_length=7)
+    faculty_name=models.CharField(max_length=122)
+    reason=models.CharField(max_length=122)
+    # choices=[
+    #     ("cultural","cultural"),
+    #     ("technical","technical"),
+    #     ("sports","sports")
+    # ]
+    # type_of_club=models.CharField(max_length=122,choices=choices)
+class OnDutyRequestClubTechnical(models.Model):
+    student_roll_no=models.CharField(max_length=6)
+    date_of_od=models.DateField()
+    course_code=models.CharField(max_length=7)
+    faculty_name=models.CharField(max_length=122)
+    reason=models.CharField(max_length=122)
+    # choices=[
+    #     ("cultural","cultural"),
+    #     ("technical","technical"),
+    #     ("sports","sports")
+    # ]
+    # type_of_club=models.CharField(max_length=122,choices=choices)
+class OnDutyRequestClubSports(models.Model):
+    student_roll_no=models.CharField(max_length=6)
+    date_of_od=models.DateField()
+    course_code=models.CharField(max_length=7)
+    faculty_name=models.CharField(max_length=122)
+    reason=models.CharField(max_length=122)
+    # choices=[
+    #     ("cultural","cultural"),
+    #     ("technical","technical"),
+    #     ("sports","sports")
+    # ]
+    # type_of_club=models.CharField(max_length=122,choices=choices)
+
