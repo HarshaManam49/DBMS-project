@@ -31,6 +31,7 @@ urlpatterns = [
     path("clubtimeline",views.clubtimeline,name='clubtimeline'),
     path("requestOd",views.requestOnDuty,name='requestOd'),
     path("approval",views.approval,name='approval'),
+    path('approval/<int:request_id>/', views.approval, name='approval'),
     path("login", views.signin,name='signin'),
     path("logout", views.signout,name='signout'),
 ]

@@ -107,6 +107,9 @@
             <li><a href="/clubtimeline"><img src="{% static '3_dashtime.png' %}" alt="I">Club Timeline</a></li>
             <li><a href="/eventslist"><img src="{% static '4_events.png' %}" alt="I">Events</a></li>
             <li><a href="/requestOd"><img src="{% static '5_RequestOD.png' %}" alt="I">RequestOD</a></li>
+            {% if category == "SC" or category == "FI" %}
+            <li><a href="/approval"><img src="{% static '5_RequestOD.png' %}" alt="I">Approve OnDuty</a> </li>
+            {% endif %}
         </div>
     
         {% block body %}{% endblock body %}

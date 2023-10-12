@@ -503,7 +503,7 @@ class ClubIdentifier(models.Model):
         ("technical","technical"),
         ("sports","sports")
     ]
-    club_type=models.CharField(max_length=122,choices=choices)
+    club_type=models.CharField(max_length=122,choices=choices,default="sports")
     choices=[
         ("FI","Faculty Incharge"),
         ("SC","Student Council"),
