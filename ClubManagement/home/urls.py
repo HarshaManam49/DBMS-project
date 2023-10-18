@@ -30,8 +30,10 @@ urlpatterns = [
     path("addevents",views.addevents,name='addevents'),
     path("clubtimeline",views.clubtimeline,name='clubtimeline'),
     path("requestOd",views.requestOnDuty,name='requestOd'),
-    path("approval",views.approval,name='approval'),
-    path('approval/<int:request_id>/', views.approval, name='approval'),
+    path("approval",views.approve,name='approval'),
+    path('approval/<int:request_id>/', views.approve, name='approval'),
+    path('approvalstatus/<int:request_id>/', views.approvalStatus, name='approvalstatus'),
+    path('approvalstatus', views.approvalStatus, name='approvalstatus'),
     path("login", views.signin,name='signin'),
     path("logout", views.signout,name='signout'),
 ]

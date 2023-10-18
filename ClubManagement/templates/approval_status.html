@@ -1,0 +1,121 @@
+{% extends "d.html" %}
+{% load static %}
+
+{% block style %}
+.rod {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    height: 90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 3%;
+}
+
+.rhello {
+    grid-column: span 2;
+    border: 2px solid #171616;
+    display: flex;
+    align-items: center;
+    font-size: 3vw;
+}
+
+.rtable {
+    grid-column: span 2;
+    border: 2px solid #171616;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.r-mem-table {
+    margin-bottom: auto;
+}
+
+{% comment %} #r-member-form {
+    display: flex;
+} {% endcomment %}
+
+#member-roll-no,
+#member-date,
+#member-course-code,
+#member-faculty,
+#member-reason {
+    margin-right: 10px;
+}
+
+#r-member-table th {
+    padding-left:5vw;
+    padding-right:5vw;
+}
+
+#submit-btn {
+    margin-top: 10px;
+}
+
+#submit-success {
+    color: green;
+    display: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+td
+{
+    text-align:center; 
+}
+
+{% endblock style %}
+
+{% block body %}
+<div class="rod">
+    <div class="rhello">
+        <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
+        OnDuty Approval Status
+    </div>
+    <div class="rtable">
+        <div class="r-mem-table table-responsive">
+                <table id="r-member-table" class="r-table">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Date</th>
+                            <th>Course Code</th>
+                            <th>Faculty</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows for member information will be added dynamically -->
+                        {%for item in on_duty_approval_status%}
+                            <tr id="st">
+                                <td>{{ item.student_roll_no }}</td>
+                                <td>{{ item.date_of_od }}</td>
+                                <td>{{ item.course_code }}</td>
+                                <td>{{ item.faculty_name }}</td>
+                                <td>{{ item.reason }}</td>
+                                {% if item.status == "AP" %}
+                                <td>Approved</td>
+                                {% elif item.status == "PSC" %}
+                                <td>Pending at SC</td>
+                                {% elif item.status == "PFI" %}
+                                <td>Pending at FI</td>
+                                {% endif %}
+                                {% comment %} <form method="post" action="{% url 'approval' item.id %}">
+                                    {% csrf_token %}
+                                        <td><button type="submit" class="btn btn-primary rounded-pill ">Approve</button></td>
+                                    </tr>
+                                </form> {% endcomment %}
+                        {% endfor%}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock body %}
