@@ -20,7 +20,7 @@ from home import views
 urlpatterns = [
     path("", views.index,name='index'),
     path("login", views.signin,name='signin'),
-    path("logout", views.signin,name='signout'),
+    path("logout", views.signout,name='signout'),
     path("contact", views.contact,name='contact'),
     path("about", views.about,name='about'),
     path("dashboard",views.dashboard,name='dashboard'),
@@ -34,6 +34,7 @@ urlpatterns = [
     path('approval/<int:request_id>/', views.approve, name='approval'),
     path('approvalstatus/<int:request_id>/', views.approvalStatus, name='approvalstatus'),
     path('approvalstatus', views.approvalStatus, name='approvalstatus'),
-    path("login", views.signin,name='signin'),
-    path("logout", views.signout,name='signout'),
+    path("changepassword", views.changePassword,name='changepassword'),
+    path("profile", views.profile,name='profile'),
+    path("addclub", views.addUser,name='adduser'),
 ]

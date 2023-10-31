@@ -44,7 +44,7 @@
         text-decoration: none;
     }
     
-    .sidebar li img {
+    .sidebar li img{
         width: 40px;
         padding-right: 4%;
     }
@@ -57,13 +57,23 @@
     .sidebar li a:hover:not(.active) {
         background-color: #b8cbea;
     }
+
+    #dropdown{
+      height:6vh;
+    }
+
+    .dropdown-item img{
+      width: 30px;
+      padding-right: 8%;
+  }
+
       {% block style %}{% endblock %} 
     </style>
     <title>{% block title %}{% endblock title %} Club Management</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-light navhome fixed-top shadow p-0 mb-0 bg-body-tertiary rounded">
-      <a class="navbar-brand p-0" href="#" style="color: #000">
+      <a class="navbar-brand p-0" href="/" style="color: #000">
         <img src="{% static 'clogo.png' %}" alt="I" width="50" height="50%">
         Club Management
       </a>
@@ -91,12 +101,30 @@
               </div>  
             </li>
           </ul>
-          <div class="nav-item p-3">
+          {% comment %} <div class="nav-item p-3">
             <div class="navitems"> 
               <a class="nav-link " href="/signin" style="color: #3d3c3c; font-size:15px" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#3d3c3c'">Sign in</a>
             </div>
+          </div> {% endcomment %}
+          
+          <div class="nav-item p-3 ml-auto">
+            <div class="navitems">
+              <div class="dropdown">
+                <a class="nav-link p-0 m-0" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img src="{% static 'profile.png' %}" alt="Profile Image" id="dropdown">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" style="background-color: #E5F3FE;">
+                  <a class="dropdown-item" href="/profile"><img src="{% static 'profile.png' %}" alt="I">Profile</a>
+                  <a class="dropdown-item" href="#"><img src="{% static '2_mem.png' %}" alt="I">Add Members</a>
+                  <a class="dropdown-item" href="/requestOd"><img src="{% static '5_RequestOD.png' %}" alt="I">Request OD</a>
+                  <a class="dropdown-item" href="/logout"><img src="{% static 'signout.png' %}" alt="I">Log out</a>
+                </div>
+
+              </div>
+            </div>
           </div>
-        </div>
+          
       </nav>
 
       <div class="dashboard">
@@ -109,6 +137,9 @@
             <li><a href="/requestOd"><img src="{% static '5_RequestOD.png' %}" alt="I">RequestOD</a></li>
             {% if category == "SC" or category == "FI" %}
             <li><a href="/approval"><img src="{% static '5_RequestOD.png' %}" alt="I">Approve OnDuty</a> </li>
+            {% endif %}
+            {% if category == "FI" %}
+            <li><a href="/addclub"><img src="{% static '5_RequestOD.png' %}" alt="I">Add Club</a> </li>
             {% endif %}
             <li><a href="/approvalstatus"><img src="{% static '5_RequestOD.png' %}" alt="I">OnDuty Approval Status</a></li>
         </div>
@@ -145,6 +176,21 @@
         }, 0);
     }
   }
+
+  const dropdown = document.querySelector('.dropdown');
+
+  if (dropdown) {
+    dropdown.addEventListener('mouseleave', () => {
+      const isOpen = dropdown.classList.contains('show');
+      if (isOpen) {
+        const toggle = dropdown.querySelector('[data-toggle="dropdown"]');
+        if (toggle) {
+          toggle.click(); // Click the toggle to close the dropdown
+        }
+      }
+    });
+  }
+  
     </script>
- </body>
+  </body>
 </html>

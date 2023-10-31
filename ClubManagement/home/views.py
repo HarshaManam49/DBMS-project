@@ -1,11 +1,14 @@
 from django.shortcuts import render,redirect
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,logout,login
 from home.models import *
-# from .forms import *
 from django.contrib import messages
 from datetime import datetime
 from django.db import connection
+
+from django.views.decorators.cache import cache_control
+
+
 # Create your views here.
 def index(request):
     return render(request,'index.html')
@@ -39,21 +42,15 @@ def about(request):
     return render(request,'about.html')
 def clubmembers(request):
     if request.user.is_authenticated:
-        return render(request,'clubmembers.html')
+        username=request.user.username
+        with connection.cursor() as cursor:
+                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+                cursor.execute(select_query)
+                result = cursor.fetchall()
+                if result:
+                    category=result[0][1]
+        return render(request,'clubmembers.html',{'category':category})
 def addmembers(request):
-    if request.user.is_authenticated:
-        return render(request,'addmembers.html')
-def eventslist(request):
-    if request.user.is_authenticated:
-        return render(request,'eventslist.html')
-def addevents(request):
-    if request.user.is_authenticated:
-        return render(request,'addevents.html')
-def clubtimeline(request):
-    if request.user.is_authenticated:
-        return render(request,'clubtimeline.html')
-
-def dashboard(request):
     if request.user.is_authenticated:
         username=request.user.username
         with connection.cursor() as cursor:
@@ -61,7 +58,49 @@ def dashboard(request):
                 cursor.execute(select_query)
                 result = cursor.fetchall()
                 if result:
-                    type=result[0][0]
+                    category=result[0][1]
+        return render(request,'addmembers.html',{'category':category})
+def eventslist(request):
+    if request.user.is_authenticated:
+        username=request.user.username
+        with connection.cursor() as cursor:
+                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+                cursor.execute(select_query)
+                result = cursor.fetchall()
+                if result:
+                    category=result[0][1]
+        return render(request,'eventslist.html',{'category':category})
+def addevents(request):
+    if request.user.is_authenticated:
+        username=request.user.username
+        with connection.cursor() as cursor:
+                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+                cursor.execute(select_query)
+                result = cursor.fetchall()
+                if result:
+                    category=result[0][1]
+        return render(request,'addevents.html',{'category':category})
+def clubtimeline(request):
+    if request.user.is_authenticated:
+        username=request.user.username
+        with connection.cursor() as cursor:
+                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+                cursor.execute(select_query)
+                result = cursor.fetchall()
+                if result:
+                    category=result[0][1]
+        return render(request,'clubtimeline.html',{'category':category})
+
+def dashboard(request):
+    if request.user.is_anonymous:
+        return redirect("/index.html")
+    if request.user.is_authenticated:
+        username=request.user.username
+        with connection.cursor() as cursor:
+                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+                cursor.execute(select_query)
+                result = cursor.fetchall()
+                if result:
                     category=result[0][1]
         return render(request,'dashboard.html',{"category":category})
 
@@ -135,6 +174,8 @@ def dashboard(request):
 
 def approvalStatus(request):
     print("inside approval status")
+    if request.user.is_anonymous:
+        return redirect("/")
     if request.user.is_authenticated:
         username=request.user.username
         with connection.cursor() as cursor:
@@ -159,18 +200,20 @@ def approvalStatus(request):
                             if category=="C":
                                 print("inside C")
                                 on_duty_approval_status = OnDutyRequest.objects.filter(type_of_club=type,username=username)
-                                if on_duty_approval_status.exists():
-                                    print("not empty")
-                                else:
-                                    print("emtpy")
+                                # if on_duty_approval_status.exists():
+                                #     print("not empty")
+                                # else:
+                                #     print("emtpy")
                             elif category=="SC" or category=="FI":
                                 on_duty_approval_status = OnDutyRequest.objects.filter(type_of_club=type)
                     except OnDutyRequest.DoesNotExist:
                         on_duty_approval_status = None
-                    return render(request, "approval_status.html", {'on_duty_approval_status': on_duty_approval_status})
+                    return render(request, "approval_status.html", {'on_duty_approval_status': on_duty_approval_status,'category':category})
 
 
 def approve(request,request_id=None):
+    if request.user.is_anonymous:
+        return redirect("/")
     if request.user.is_authenticated:
         username=request.user.username
         with connection.cursor() as cursor:
@@ -207,7 +250,7 @@ def approve(request,request_id=None):
                                 #     on_duty_requests = OnDutyRequestSCTechnical.objects.all()
                                 # elif type=="sports":
                                 #     on_duty_requests = OnDutyRequestSCCultural.objects.all()
-                            return render(request, "approval.html", {'on_duty_requests': on_duty_requests})
+                            return render(request, "approval.html", {'on_duty_requests': on_duty_requests,'category':category})
                         # elif category=="SC" and type=="cultural":
                         #     #display request list of cultural from clubs
                         #     # print("inside sc and cultural")
@@ -236,156 +279,166 @@ def approve(request,request_id=None):
                             on_duty_requests = OnDutyRequest.objects.filter(type_of_club=type,status="PFI")
                     except OnDutyRequest.DoesNotExist:
                         on_duty_requests = None
-                    return render(request, "approval.html", {'on_duty_requests': on_duty_requests})
+                    return render(request, "approval.html", {'on_duty_requests': on_duty_requests,'category':category})
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def requestOnDuty(request):
+    if request.user.is_anonymous:
+        return redirect("/")
+    if request.user.is_authenticated:
+        username = request.user.username
+        with connection.cursor() as cursor:
+            select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+            cursor.execute(select_query)
+            result = cursor.fetchall()
+            if result:
+                type=result[0][0]
+                category=result[0][1]
+            if request.method == 'POST':
+                username = request.user.username
+                roll_nos = request.POST.getlist('roll_no')
+                dates = request.POST.getlist('date')
+                course_codes = request.POST.getlist('course-code')
+                faculties = request.POST.getlist('faculty')
+                reasons = request.POST.getlist('reason')            
+                if category=="C":
+                    if type=="cultural":
+                        for i in range(len(roll_nos)):
+                            record = OnDutyRequest(
+                            student_roll_no=roll_nos[i],
+                            date_of_od=dates[i],
+                            course_code=course_codes[i],
+                            faculty_name=faculties[i],
+                            reason=reasons[i],
+                            type_of_club="cultural",
+                            status="PSC",
+                            username=username
+                            )
+                            record.save()
+                        return redirect('/requestOd')
+                    elif type=="sports":
+                        for i in range(len(roll_nos)):
+                            record = OnDutyRequest(
+                            student_roll_no=roll_nos[i],
+                            date_of_od=dates[i],
+                            course_code=course_codes[i],
+                            faculty_name=faculties[i],
+                            reason=reasons[i],
+                            type_of_club="sports",
+                            status="PSC",
+                            username=username
+                            )
+                            record.save()
+                        return redirect('/requestOd')
+                    elif type=="technical":
+                        for i in range(len(roll_nos)):
+                            record = OnDutyRequest(
+                            student_roll_no=roll_nos[i],
+                            date_of_od=dates[i],
+                            course_code=course_codes[i],
+                            faculty_name=faculties[i],
+                            reason=reasons[i],
+                            type_of_club="technical",
+                            status="PSC",
+                            username=username
+                            )
+                            record.save()
+                        return redirect('/requestOd')
+                elif category=="SC":
+                    if type=="cultural":
+                        for i in range(len(roll_nos)):
+                            record = OnDutyRequest(
+                            student_roll_no=roll_nos[i],
+                            date_of_od=dates[i],
+                            course_code=course_codes[i],
+                            faculty_name=faculties[i],
+                            reason=reasons[i],
+                            type_of_club="cultural",
+                            status="PFI",
+                            username=username
+                            )
+                            record.save()
+                        return redirect('/requestOd')
+                    elif type=="technical":
+                        for i in range(len(roll_nos)):
+                            record = OnDutyRequest(
+                            student_roll_no=roll_nos[i],
+                            date_of_od=dates[i],
+                            course_code=course_codes[i],
+                            faculty_name=faculties[i],
+                            reason=reasons[i],
+                            type_of_club="technical",
+                            status="PFI",
+                            username=username
+                            )
+                            record.save()
+                        return redirect('/requestOd')
+                    elif type=="sports":
+                        for i in range(len(roll_nos)):
+                            record = OnDutyRequest(
+                            student_roll_no=roll_nos[i],
+                            date_of_od=dates[i],
+                            course_code=course_codes[i],
+                            faculty_name=faculties[i],
+                            reason=reasons[i],
+                            type_of_club="sports",
+                            status="PFI",
+                            username=username
+                            )
+                            record.save()
+                        return redirect('/requestOd')                 
+        return render(request,"requestOd.html",{'category':category})
+    
+    
+
+def changePassword(request):
+    if request.user.is_anonymous:
+        return redirect("/")
     if request.user.is_authenticated:
         if request.method == 'POST':
-            username = request.user.username
-            roll_nos = request.POST.getlist('roll_no')
-            dates = request.POST.getlist('date')
-            course_codes = request.POST.getlist('course-code')
-            faculties = request.POST.getlist('faculty')
-            reasons = request.POST.getlist('reason')
-            with connection.cursor() as cursor:
-                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
-                cursor.execute(select_query)
-                result = cursor.fetchall()
-                if result:
-                    type=result[0][0]
-                    category=result[0][1]
-                    if category=="C":
-                        if type=="cultural":
-                            for i in range(len(roll_nos)):
-                                record = OnDutyRequest(
-                                student_roll_no=roll_nos[i],
-                                date_of_od=dates[i],
-                                course_code=course_codes[i],
-                                faculty_name=faculties[i],
-                                reason=reasons[i],
-                                type_of_club="cultural",
-                                status="PSC",
-                                username=username
-                                )
-                                record.save()
-                                # record = OnDutyRequestClubCultural(
-                                # student_roll_no=roll_nos[i],
-                                # date_of_od=dates[i],
-                                # course_code=course_codes[i],
-                                # faculty_name=faculties[i],
-                                # reason=reasons[i],
-                                # )
-                                # record.save()
-                            return redirect('/requestOd')
-                        elif type=="sports":
-                            for i in range(len(roll_nos)):
-                                # record = OnDutyRequestClubSports(
-                                # student_roll_no=roll_nos[i],
-                                # date_of_od=dates[i],
-                                # course_code=course_codes[i],
-                                # faculty_name=faculties[i],
-                                # reason=reasons[i],
-                                # )
-                                # record.save()
-                                record = OnDutyRequest(
-                                student_roll_no=roll_nos[i],
-                                date_of_od=dates[i],
-                                course_code=course_codes[i],
-                                faculty_name=faculties[i],
-                                reason=reasons[i],
-                                type_of_club="sports",
-                                status="PSC",
-                                username=username
-                                )
-                                record.save()
-                                return redirect('/requestOd')
-                        elif type=="technical":
-                            for i in range(len(roll_nos)):
-                                # record = OnDutyRequestClubTechnical(
-                                # student_roll_no=roll_nos[i],
-                                # date_of_od=dates[i],
-                                # course_code=course_codes[i],
-                                # faculty_name=faculties[i],
-                                # reason=reasons[i],
-                                # )
-                                # record.save()
-                                record = OnDutyRequest(
-                                student_roll_no=roll_nos[i],
-                                date_of_od=dates[i],
-                                course_code=course_codes[i],
-                                faculty_name=faculties[i],
-                                reason=reasons[i],
-                                type_of_club="technical",
-                                status="PSC",
-                                username=username
-                                )
-                                record.save()
-                                return redirect('/requestOd')
-                    elif category=="SC":
-                        if type=="cultural":
-                            for i in range(len(roll_nos)):
-                                # record = OnDutyRequestSCCultural(
-                                # student_roll_no=roll_nos[i],
-                                # date_of_od=dates[i],
-                                # course_code=course_codes[i],
-                                # faculty_name=faculties[i],
-                                # reason=reasons[i],
-                                # )
-                                # record.save()
-                                record = OnDutyRequest(
-                                student_roll_no=roll_nos[i],
-                                date_of_od=dates[i],
-                                course_code=course_codes[i],
-                                faculty_name=faculties[i],
-                                reason=reasons[i],
-                                type_of_club="cultural",
-                                status="PFI",
-                                username=username
-                                )
-                                record.save()
-                                return redirect('/requestOd')
-                        elif type=="technical":
-                            for i in range(len(roll_nos)):
-                                # record = OnDutyRequestSCTechnical(
-                                # student_roll_no=roll_nos[i],
-                                # date_of_od=dates[i],
-                                # course_code=course_codes[i],
-                                # faculty_name=faculties[i],
-                                # reason=reasons[i],
-                                # )
-                                # record.save()
-                                record = OnDutyRequest(
-                                student_roll_no=roll_nos[i],
-                                date_of_od=dates[i],
-                                course_code=course_codes[i],
-                                faculty_name=faculties[i],
-                                reason=reasons[i],
-                                type_of_club="technical",
-                                status="PFI",
-                                username=username
-                                )
-                                record.save()
-                                return redirect('/requestOd')
-                        elif type=="sports":
-                            for i in range(len(roll_nos)):
-                                # record = OnDutyRequestSCCultural(
-                                # student_roll_no=roll_nos[i],
-                                # date_of_od=dates[i],
-                                # course_code=course_codes[i],
-                                # faculty_name=faculties[i],
-                                # reason=reasons[i],
-                                # )
-                                # record.save()
-                                record = OnDutyRequest(
-                                student_roll_no=roll_nos[i],
-                                date_of_od=dates[i],
-                                course_code=course_codes[i],
-                                faculty_name=faculties[i],
-                                reason=reasons[i],
-                                type_of_club="sports",
-                                status="PFI",
-                                username=username
-                                )
-                                record.save()
-                                return redirect('/requestOd')
-        return render(request,"requestOd.html")
+            current_password = request.POST['current_password']
+            new_password = request.POST['new_password']
+            confirm_password = request.POST['confirm_new_password']
+            user = request.user
+            # Check if the current password is correct
+            if user.check_password(current_password):
+                if new_password == confirm_password:
+                    # Change the user's password
+                    user.set_password(new_password)
+                    user.save()
+                    print("changed password")
+                    logout(request)
+                    return render(request,'index.html')  
+
+        return render(request, 'changePassword.html')
+
+
+def addUser(request):
+    if request.user.is_anonymous:
+        return redirect("/")
+    if request.user.is_authenticated:
+        with connection.cursor() as cursor:
+            select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
+            cursor.execute(select_query)
+            result = cursor.fetchall()
+            if result:
+                type=result[0][0]
+                category=result[0][1]
+                if category=="FI":
+                    if request.method == 'POST':
+                        username = request.POST['username']
+                        password = request.POST['password']
+                        confirm_password = request.POST['confirm_password']
+                        if password == confirm_password:
+                            # Check if a user with the same username or email already exists
+                            if not User.objects.filter(username=username).exists():
+                                User.objects.create_user(username=username,password=password)
+                            return redirect('adduser.html',{"category":category})
+                    return render(request, 'adduser.html',{"category":category})
+        return render(request, 'adduser.html')
+def profile(request):
+    if request.user.is_anonymous:
+        return redirect("/")
+    if request.user.is_authenticated:
+        return render(request,'profile.html')

@@ -73,6 +73,12 @@ td
 
 {% endblock style %}
 
+{%block approval%}
+    {% if category == "SC" or category == "FI" %}
+        <a href="/approval"><img src="{% static '5_RequestOD.png' %}" alt="I">Approve OnDuty</a> 
+    {% endif %}
+{%endblock%}
+
 {% block body %}
 <div class="rod">
     <div class="rhello">

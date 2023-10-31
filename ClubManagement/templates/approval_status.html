@@ -73,6 +73,12 @@ td
 
 {% endblock style %}
 
+{%block approval%}
+    {% if category == "SC" or category == "FI" %}
+        <a href="/approval"><img src="{% static '5_RequestOD.png' %}" alt="I">Approve OnDuty</a> 
+    {% endif %}
+{%endblock%}
+
 {% block body %}
 <div class="rod">
     <div class="rhello">
@@ -81,6 +87,22 @@ td
     </div>
     <div class="rtable">
         <div class="r-mem-table table-responsive">
+            <form method='post' action='/approvalstatus'>
+                {% csrf_token %}
+                <table id="r-member-table" class="r-table">
+                    <tbody>
+                        <!-- Table rows for member information will be added dynamically -->
+                        <tr id="st">
+                            <td><input type="text" name='roll_no' placeholder="Roll No"></td>
+                            <td><input type="date" name="date" placeholder="dd-mm-yyyy"></td>
+                            <td><input type="text" name="course-code" placeholder="Course Code"></td>
+                            <td><input type="text" name="faculty" placeholder="Faculty"></td>
+                            <td><input type="text" name="reason" placeholder="Reason"></td>
+                            <td><button type="submit" class="btn btn-danger rounded-pill">Search</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
                 <table id="r-member-table" class="r-table">
                     <thead>
                         <tr>
