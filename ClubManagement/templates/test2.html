@@ -1,0 +1,209 @@
+{% extends "d.html" %}
+{% load static %}
+
+{% block style %}
+.rod {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    height: 90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 3%;
+}
+
+.rhello {
+    grid-column: span 2;
+    border: 2px solid #171616;
+    display: flex;
+    align-items: center;
+    font-size: 3vw;
+}
+
+.rtable {
+    grid-column: span 2;
+    border: 2px solid #171616;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.r-mem-table {
+    margin-bottom: auto;
+}
+
+#r-member-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#member-roll-no,
+#member-date,
+#member-course-code,
+#member-faculty,
+#member-reason {
+    margin-right: 10px;
+}
+
+#r-member-table th {
+    padding-left:5vw;
+    padding-right:5vw;
+}
+
+#submit-btn {
+    margin-top: 10px;
+}
+
+#submit-success {
+    color: green;
+    display: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+{% endblock style %}
+
+{% block body %}
+<div class="rod">
+    <div class="rhello">
+        <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
+        Request OnDuty
+    </div>
+    <div class="rtable">
+        <div class="r-mem-table">
+            <table id="r-member-table" class="r-table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Date</th>
+                        <th>Course Code</th>
+                        <th>Faculty</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows for member information will be added dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <form id="r-member-form">
+            <input type="text" id="r-member-roll-no" placeholder="Roll No">
+            <input type="text" id="r-member-date" placeholder="dd-mm-yyyy">
+            <input type="text" id="r-member-course-code" placeholder="Course Code">
+            <input type="text" id="r-member-faculty" placeholder="Faculty">
+            <input type="text" id="r-member-reason" placeholder="Reason">
+            <a href="" >
+                <button type="button" class="btn btn-primary rounded-pill" id="add-btn">
+                    Add-req
+                </button>
+            </a>
+        </form>
+
+        {% comment %} <a href="">
+            <button type="button" class="btn btn-primary mb-5 rounded-pill" id="submit-btn">
+                Submit
+            </button>
+        </a> {% endcomment %}
+        <form id="submit-form" method="post" action="/requestOd">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary mb-5 rounded-pill" id="submit-btn">
+                Submit
+            </button>
+        </form>
+
+        <div id="submit-success">Submitted Successfully !!!</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var successMessage = document.getElementById("submit-success");
+        successMessage.style.display = "none";
+    });
+    var members = [];
+    var final_list = []; // Initializing
+
+    function captureMemberInfo() {
+        var rollNo = document.getElementById("r-member-roll-no").value;
+        var date = document.getElementById("r-member-date").value;
+        var courseCode = document.getElementById("r-member-course-code").value;
+        var faculty = document.getElementById("r-member-faculty").value;
+        var reason = document.getElementById("r-member-reason").value;
+        return { rollNo: rollNo, date: date, courseCode: courseCode, faculty: faculty, reason: reason };
+    }
+
+    function addMember() {
+        event.preventDefault();
+        var member = captureMemberInfo();
+        if (member.rollNo.trim() !== "" && member.date.trim() !== "" && member.courseCode.trim() !== "" && member.faculty.trim() !== "" && member.reason.trim() !== "") {
+            members.push(member);
+            updateMemberTable();
+            document.getElementById("r-member-roll-no").value = "";
+            document.getElementById("r-member-date").value = "";
+            document.getElementById("r-member-course-code").value = "";
+            document.getElementById("r-member-faculty").value = "";
+            document.getElementById("r-member-reason").value = "";
+        }
+    }
+
+    function updateMemberTable() {
+        var tableBody = document.querySelector("#r-member-table tbody");
+        tableBody.innerHTML = "";
+        members.forEach(function (member) {
+            var row = document.createElement("tr");
+            var rollNoCell = document.createElement("td");
+            var dateCell = document.createElement("td");
+            var courseCodeCell = document.createElement("td");
+            var facultyCell = document.createElement("td");
+            var reasonCell = document.createElement("td");
+            rollNoCell.textContent = member.rollNo;
+            dateCell.textContent = member.date;
+            courseCodeCell.textContent = member.courseCode;
+            facultyCell.textContent = member.faculty;
+            reasonCell.textContent = member.reason;
+            row.appendChild(rollNoCell);
+            row.appendChild(dateCell);
+            row.appendChild(courseCodeCell);
+            row.appendChild(facultyCell);
+            row.appendChild(reasonCell);
+            tableBody.appendChild(row);
+        });
+    }
+
+    document.getElementById("add-btn").addEventListener("click", addMember);
+    document.getElementById("submit-btn").addEventListener("click", function () {
+        event.preventDefault();
+        var member = captureMemberInfo();
+        if (member.rollNo.trim() !== "" && member.date.trim() !== "" && member.courseCode.trim() !== "" && member.faculty.trim() !== "" && member.reason.trim() !== "") {
+            members.push(member);
+            //final_list.push(member); // Add member data to final_list
+        }
+        console.log("Members: ",final_list);
+        {% for form in formset %}
+                    {{ form.as_table }}
+                {% endfor %}
+
+        members = []; 
+        updateMemberTable();
+        document.getElementById("r-member-roll-no").value = "";
+        document.getElementById("r-member-date").value = "";
+        document.getElementById("r-member-course-code").value = "";
+        document.getElementById("r-member-faculty").value = "";
+        document.getElementById("r-member-reason").value = "";
+
+        var successMessage = document.getElementById("submit-success");
+        setTimeout(() => {
+            successMessage.style.display = "block";
+             }, 100);
+    });
+</script>
+{% endblock body %}

@@ -44,7 +44,7 @@
         text-decoration: none;
     }
     
-    .sidebar li img{
+    .sidebar li img {
         width: 40px;
         padding-right: 4%;
     }
@@ -81,6 +81,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-light navhome fixed-top shadow p-0 mb-0 bg-body-tertiary rounded">
       <a class="navbar-brand p-0" href="/" style="color: #000">
+      <a class="navbar-brand p-0" href="/" style="color: #000">
         <img src="{% static 'clogo.png' %}" alt="I" width="50" height="50%">
         Club Management
       </a>
@@ -116,7 +117,7 @@
           
           <div class="nav-item p-3 ml-auto">
             <div class="navitems">
-              <div class="dropdown" id="profile-dropdown">
+              <div class="dropdown">
                 <a class="nav-link p-0 m-0" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <img src="{% static 'profile.png' %}" alt="Profile Image" id="dropdown">
                 </a>
@@ -124,8 +125,8 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" style="background-color: #E5F3FE;">
                   <a class="dropdown-item" href="/profile"><img src="{% static 'profile.png' %}" alt="I">Profile</a>
                   <a class="dropdown-item" href="#"><img src="{% static '2_mem.png' %}" alt="I">Add Members</a>
-                  <a class="dropdown-item" href="#"><img src="{% static '5_RequestOD.png' %}" alt="I">Request OD</a>
-                  <a class="dropdown-item" href="#"><img src="{% static 'signout.png' %}" alt="I">Sign out</a>
+                  <a class="dropdown-item" href="/requestOd"><img src="{% static '5_RequestOD.png' %}" alt="I">Request OD</a>
+                  <a class="dropdown-item" href="/logout"><img src="{% static 'signout.png' %}" alt="I">Log out</a>
                 </div>
 
               </div>
@@ -142,6 +143,13 @@
             <li><a href="/clubtimeline"><img src="{% static '3_dashtime.png' %}" alt="I">Club Timeline</a></li>
             <li><a href="/eventslist"><img src="{% static '4_events.png' %}" alt="I">Events</a></li>
             <li><a href="/requestOd"><img src="{% static '5_RequestOD.png' %}" alt="I">RequestOD</a></li>
+            {% if category == "SC" or category == "FI" %}
+            <li><a href="/approval"><img src="{% static '5_RequestOD.png' %}" alt="I">Approve OnDuty</a> </li>
+            {% endif %}
+            {% if category == "FI" %}
+            <li><a href="/addclub"><img src="{% static '5_RequestOD.png' %}" alt="I">Add Club</a> </li>
+            {% endif %}
+            <li><a href="/approvalstatus"><img src="{% static '5_RequestOD.png' %}" alt="I">OnDuty Approval Status</a></li>
         </div>
     
         {% block body %}{% endblock body %}

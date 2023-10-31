@@ -19,7 +19,8 @@ from django.urls import path
 from home import views
 urlpatterns = [
     path("", views.index,name='index'),
-    path("signin", views.signin,name='signin'),
+    path("login", views.signin,name='signin'),
+    path("logout", views.signout,name='signout'),
     path("contact", views.contact,name='contact'),
     path("about", views.about,name='about'),
     path("dashboard",views.dashboard,name='dashboard'),
@@ -28,9 +29,12 @@ urlpatterns = [
     path("eventslist",views.eventslist,name='eventslist'),
     path("addevents",views.addevents,name='addevents'),
     path("clubtimeline",views.clubtimeline,name='clubtimeline'),
-    path("requestOd",views.requestOd,name='requestOd'),
-    path("login", views.signin,name='signin'),
-    path("logout", views.signout,name='signout'),
+    path("requestOd",views.requestOnDuty,name='requestOd'),
+    path("approval",views.approve,name='approval'),
+    path('approval/<int:request_id>/', views.approve, name='approval'),
+    path('approvalstatus/<int:request_id>/', views.approvalStatus, name='approvalstatus'),
+    path('approvalstatus', views.approvalStatus, name='approvalstatus'),
+    path("changepassword", views.changePassword,name='changepassword'),
     path("profile", views.profile,name='profile'),
-    path("changepasswd", views.changepasswd,name='changepasswd'),
+    path("addclub", views.addUser,name='adduser'),
 ]

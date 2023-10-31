@@ -1,0 +1,12 @@
+{%for item in on_duty_requests%}
+     Hello2 
+    <p>Roll No: {{ item.student_roll_no }}</p>
+    <p>Date: {{ item.date_of_od }}</p>
+    <p>Course Code: {{ item.course_code }}</p>
+    <p>Faculty: {{ item.faculty_name }}</p>
+    <p>Reason: {{ item.reason }}</p>
+    <form method="post" action="{% url 'approval' item.id %}">
+        {% csrf_token %}
+        <button type="submit">Approve</button>
+    </form>
+    {% endfor%}
