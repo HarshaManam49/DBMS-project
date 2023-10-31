@@ -2,53 +2,153 @@
 {% load static %}
 
 {% block style %}
-
-.rod
-{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.rod {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 0.25fr 1fr;
-    height:90vh;
+    height: 90vh;
     grid-gap: 18px;
     background-image: url("{% static 'Clubbg.png' %}");
-    background-size:cover;
+    background-size: cover;
     background-repeat: no-repeat;
-    padding:3%;
+    padding: 3%;
 }
 
-.rhello
-{
-    grid-column:span 2;
+.rhello {
+    grid-column: span 2;
     border: 2px solid #171616;
-    display:flex;
-    align-items:center;
-    font-size:3vw;
+    display: flex;
+    align-items: center;
+    font-size: 3vw;
 }
 
-.rtable
-{
-    grid-column:span 2;
+.rtable {
+    grid-column: span 2;
     border: 2px solid #171616;
-    display:flex;
-    align-items:end;
-    justify-content:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.r-mem-table {
+    margin-bottom: auto;
+}
+
+{% comment %} #r-member-form {
+    display: flex;
+} {% endcomment %}
+
+#member-roll-no,
+#member-date,
+#member-course-code,
+#member-faculty,
+#member-reason {
+    margin-right: 10px;
+}
+
+#r-member-table th {
+    padding-left:5vw;
+    padding-right:5vw;
+}
+
+#submit-btn {
+    margin-top: 10px;
+}
+
+#submit-success {
+    color: green;
+    display: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+td
+{
+    text-align:center; 
 }
 
 {% endblock style %}
 
-{% block body %}
+{%block approval%}
+    {% if category == "SC" or category == "FI" %}
+        <a href="/approval"><img src="{% static '5_RequestOD.png' %}" alt="I">Approve OnDuty</a> 
+    {% endif %}
+{%endblock%}
 
-    <div class="rod">
-        <div class="rhello">
-           <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
-            Request OnDuty
-        </div>
-        <div class="rtable">
-            <a href="">
-                <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
-                    Request
+{% block body %}
+<div class="rod">
+    <div class="rhello">
+        <img class="p-3" style="width:7vw; height:auto;" src="{% static '5_RequestOD.png'%}" alt="I">
+        Request OnDuty
+    </div>
+    <div class="rtable">
+        <div class="r-mem-table table-responsive">
+            <form method='post' action='/requestOd'>
+                {% csrf_token %}
+                <table id="r-member-table" class="r-table">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Date</th>
+                            <th>Course Code</th>
+                            <th>Faculty</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows for member information will be added dynamically -->
+                        <tr id="st">
+                            <td><input type="text" name='roll_no' placeholder="Roll No"></td>
+                            <td><input type="date" name="date" placeholder="dd-mm-yyyy"></td>
+                            <td><input type="text" name="course-code" placeholder="Course Code"></td>
+                            <td><input type="text" name="faculty" placeholder="Faculty"></td>
+                            <td><input type="text" name="reason" placeholder="Reason"></td>
+                            <td><button class="btn btn-danger rounded-pill" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <button type="submit" class="btn btn-primary rounded-pill">
+                        Submit
+                    </button>
+                </div>
+            </form>
+                <button type="button" onclick="addNewRow()" class="btn btn-primary rounded-pill ml-3" id="login-btn">
+                   Add Student
                 </button>
-            </a>
+            
         </div>
     </div>
+
+    <script>
+        // Create a new div element
+        function addNewRow() {
+            var table = document.getElementById('r-member-table');
+            var newRow = table.insertRow(table.rows.length);
+            
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+            var cell6 = newRow.insertCell(5);
+
+            cell1.innerHTML = '<input type="text" name="roll_no" placeholder="Roll No">';
+            cell2.innerHTML = '<input type="date" name="date" placeholder="dd-mm-yyyy">';
+            cell3.innerHTML = '<input type="text" name="course-code" placeholder="Course Code">';
+            cell4.innerHTML = '<input type="text" name="faculty" placeholder="Faculty">';
+            cell5.innerHTML = '<input type="text" name="reason" placeholder="Reason">';
+            cell6.innerHTML = '<button type="button" class="btn btn-danger rounded-pill" onclick="deleteRow(this)">Delete</button>';
+        }
+
+        function deleteRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
 {% endblock body %}
