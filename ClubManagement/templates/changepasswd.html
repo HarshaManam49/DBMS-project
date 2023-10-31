@@ -1,0 +1,86 @@
+{% extends "d.html" %}
+{% load static %}
+
+{% block style %}
+
+.pmembers
+{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    height:90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size:cover;
+    background-repeat: no-repeat;
+    padding:3%;
+}
+
+.phello
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+    display:flex;
+    align-items:center;
+    font-size:3vw;
+}
+
+.ptable
+{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    grid-column:span 2;
+    border: 2px solid #171616;
+}
+
+.ptitem
+{
+    font-size:1.25vw;
+    font-weight:500;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    margin-right:3%;
+    margin-left:3%;
+}
+
+.pcontent
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+}
+
+.pchangepswd
+{
+    align-self:center;
+}
+
+{% endblock style %}
+
+{% block body %}
+    <div class="pmembers">
+        <div class="phello">
+           <img class="p-3" style="width:7vw; height:auto;" src="{% static 'changepasswdbg.png'%}" alt="I">
+            Change Password
+        </div>
+        <form method='post' action='/' class="ptable">
+            <div class="pname ptitem">
+                Current Password:
+                <input type="text" name="currentpasswd">
+            </div>
+            <div class="ptype ptitem">
+                New Password:
+                <input type="text" name="newpasswd">
+            </div>
+            <div class="pemail ptitem">
+                Confirm New Password:
+                <input type="text" name="cnfnewpasswd">
+            </div>
+            <div class="pchangepswd ">
+                <button type="submit" class="btn btn-primary rounded-pill">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock body %}

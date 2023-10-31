@@ -1,0 +1,103 @@
+{% extends "d.html" %}
+{% load static %}
+
+{% block style %}
+
+.pmembers
+{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    height:90vh;
+    grid-gap: 18px;
+    background-image: url("{% static 'Clubbg.png' %}");
+    background-size:cover;
+    background-repeat: no-repeat;
+    padding:3%;
+}
+
+.phello
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+    display:flex;
+    align-items:center;
+    font-size:3vw;
+}
+
+.ptable
+{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    grid-column:span 2;
+    border: 2px solid #171616;
+}
+
+.ptitem
+{
+    font-size:1.25vw;
+    font-weight:500;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    margin-right:3%;
+    margin-left:3%;
+}
+
+.pcontent
+{
+    grid-column:span 2;
+    border: 2px solid #171616;
+}
+
+.pchangepswd
+{
+    align-self:center;
+}
+
+{% endblock style %}
+
+{% block body %}
+
+    <div class="pmembers">
+        <div class="phello">
+           <img class="p-3" style="width:7vw; height:auto;" src="{% static 'profile.png'%}" alt="I">
+            Profile
+        </div>
+        <div class="ptable">
+            <div class="pname ptitem">
+                CLUB NAME:
+                <div class="pcontent">
+                </div>
+            </div>
+            <div class="ptype ptitem">
+                TYPE:
+                <div class="pcontent">
+                </div>
+            </div>
+            <div class="pemail ptitem">
+                EMAIL:
+                <div class="pcontent">
+                </div>
+            </div>
+            <div class="pintro ptitem">
+                INTRO:
+                <div class="pcontent">
+                </div>
+            </div>
+            <div class="psocial ptitem">
+                SOCIAL HANDELS(IF ANY):
+                <div class="pcontent">
+                </div>
+            </div>
+            <div class="pchangepswd ">
+                <a href="/changepasswd">
+                    <button type="button" class="btn btn-primary rounded-pill">
+                        CHANGE PASSWORD
+                    </button>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+{% endblock body %}
