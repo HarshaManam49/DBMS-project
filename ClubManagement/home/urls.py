@@ -31,4 +31,6 @@ urlpatterns = [
     path("requestOd",views.requestOd,name='requestOd'),
     path("login", views.signin,name='signin'),
     path("logout", views.signout,name='signout'),
+    path("profile", views.profile,name='profile'),
+    path("changepasswd", views.changepasswd,name='changepasswd'),
 ]
