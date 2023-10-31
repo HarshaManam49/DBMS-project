@@ -19,7 +19,6 @@ def addmembers(request):
 def eventslist(request):
     return render(request,'eventslist.html')
 def addevents(request):
-    return render(request,'addevents.html')
     if request.method == 'POST':
         roll_nos = request.POST.getlist('roll_no')
         dates = request.POST.getlist('date')
