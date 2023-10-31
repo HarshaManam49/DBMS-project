@@ -171,6 +171,39 @@ body {
    width:90%;
    height:100%;
 }
+{% comment %}  {% endcomment %}
+.fade-in {
+   opacity: 0;
+   transform: translateY(20px);
+   transition: opacity 0.5s ease 0.2s, transform 0.7s ease 0.2s;
+}
+
+ .fade-in.visible {
+   opacity: 1;
+   transform: translateY(0);
+ }
+
+.fade-leftside {
+   opacity: 0;
+   transform: translateX(-30px);
+   transition: opacity 0.5s ease 0.2s, transform 0.7s ease 0.2s;
+}
+
+ .fade-leftside.visible {
+   opacity: 1;
+   transform: translateX(0);
+ }
+
+ {% comment %} .fade-rightside {
+   opacity: 0;
+   transform: translateX(20px);
+   transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}
+
+.fade-rightside.visible {
+   opacity: 1;
+   transform: translateX(0);
+} {% endcomment %}
 
 {% endblock %}
 
@@ -178,67 +211,100 @@ body {
 {% block body %}
    <div class="cont" id="home">
       <div class="item info">
-        <p style="font-size: 5vw; font-family:Arial;">Club Management</p>
-        <div style="font-size: 1vw;"class=" content">
+        <p style="font-size: 5vw; font-family:Arial;" class="fade-leftside">Club Management</p>
+        <div style="font-size: 1vw;"class="content fade-leftside">
          A cutting-edge management for your top-notch clubs. 
-         Anytime Anywhere..        </div>
-         <a href="/login">
-            <button type="button" class="btn btn-primary mt-1" id="login-btn">
-            Login
+         Anytime Anywhere..
+         </div>
+         <a href="/dashboard">
+            <button type="button" class="btn btn-primary mt-1 fade-leftside" id="login-btn">
+            <p class="fade-leftside">Login</p>
             </button>
          </a>
       </div>
-      <div class= "item i mt-2"><img src="{% static 'club.png' %}" alt="I"></div>
+      <div class= "item i mt-2 fade-leftside"><img src="{% static 'club.png' %}" alt="I"></div>
   </div>
 
   <div class="about" id="about">
       <div class="item info">
-         <p style="font-size: 4vw; font-family:Verdana, Geneva, Tahoma, sans-serif;">Say Hello to C-Age</p>
-         <div class="content">
+         <p style="font-size: 4vw; font-family:Verdana, Geneva, Tahoma, sans-serif;" class="fade-in">Say Hello to C-Age</p>
+         <div class="content fade-in">
             Your mission our plan, your team our management.
             At C-Age we work daily to build an efficient and easy way for managing the clubs. Inter club events, time slot for sessions, On-Duty for members can be done now in fingertips.
          </div>
       </div>
-      <div class="item"><img src="{% static 'about.png' %}" alt="I"></div>
+      <div class="item fade-in"><img src="{% static 'about.png' %}" alt="I"></div>
    </div>
 
-   <div class="features">
-      <div class="fcontent">
-         <p class="pl-5" style="font-size: 4vw; font-family:Arial;">C-Age's Best Features</p>
+   <div class="features fade-leftside">
+      <div class="fcontent fade-leftside">
+         <p class="pl-5 fade-leftside" style="font-size: 4vw; font-family:Arial;">C-Age's Best Features</p>
       </div>
       <div class="fitem f1">
-         <div class="circle cnum1">
-            <p>01</p>
+         <div class="circle cnum1 fade-leftside">
+            <p class="fade-leftside">01</p>
          </div>
          <div>
-            <p class="p-5" style="font-size:1.5vw; color:white;">Time Slot Management: The time and date of each event is noted to show the free slots to conduct any other event/club sessions.</p>
+            <p class="p-5 fade-leftside" style="font-size:1.5vw; color:white;">Time Slot Management: The time and date of each event is noted to show the free slots to conduct any other event/club sessions.</p>
          </div>
       </div>
       <div class="fitem f2">
-         <div class="circle cnum2">
-            <p>02</p>
+         <div class="circle cnum2 fade-leftside">
+            <p class="fade-leftside">02</p>
          </div>
          <div>
-            <p class="p-5" style="font-size: 1.5vw; color:white;">On Duty List: The On-Duty list of members can now be sent directly to the faculty for consideration.</p>
+            <p class="p-5 fade-leftside" style="font-size: 1.5vw; color:white;">On Duty List: The On-Duty list of members can now be sent directly to the faculty for consideration.</p>
          </div>
       </div>
       <div class="fitem f3">
-         <div class="circle cnum3">
+         <div class="circle cnum3 fade-leftside">
             <p>03</p>
          </div>
          <div>
-            <p class="p-5" style="font-size: 1.5vw; color:white;">The communication between managing council, event faculty coordinator and the volunteers/members is now made easy.</p>
+            <p class="p-5 fade-leftside" style="font-size: 1.5vw; color:white;">The communication between managing council, event faculty coordinator and the volunteers/members is now made easy.</p>
          </div>
       </div>
 
    </div>
 
    <div class="watch">
-      <div class= "witem timeline"><img src="{% static 'timeline.png' %}" alt="I"></div> 
+      <div class= "witem timeline fade-in"><img src="{% static 'timeline.png' %}" alt="I"></div> 
       <div class="witem wcontent">
-         <p style="font-size:3vw">Watch Your Club grow</p>
-         <div style="font-size:1vw">Watch the timeline of events organised in your club, the pending works for each event and many more!</div>
+         <p style="font-size:3vw" class="fade-leftside">Watch Your Club grow</p>
+         <div style="font-size:1vw" class="fade-leftside">Watch the timeline of events organised in your club, the pending works for each event and many more!</div>
       </div>
-      <img class="stairs" src="{% static 'stairs.png' %}" alt="I">
+      <img class="stairs fade-leftside" src="{% static 'stairs.png' %}" alt="I">
    </div>
+
+   <script>
+      const elementsToAnimatefadeside = document.querySelectorAll('.fade-leftside');
+      const elementsToAnimatefadein = document.querySelectorAll('.fade-in');
+  
+      function checkScroll() {
+        elementsToAnimatefadein.forEach((element) => {
+          const elementTop = element.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+  
+          if (elementTop < windowHeight - 50) {
+            element.classList.add('visible');
+          }
+        });
+      }
+
+      function checkScrollFadeSide() {
+         elementsToAnimatefadeside.forEach((element) => {
+           const elementTop = element.getBoundingClientRect().top;
+           const windowHeight = window.innerHeight;
+       
+           if (elementTop < windowHeight - 50) {
+             element.classList.add('visible');
+           }
+         });
+       }       
+      window.addEventListener('scroll', checkScroll);
+      window.addEventListener('scroll', checkScrollFadeSide);
+      checkScroll();
+      checkScrollFadeSide();
+    </script>
+
 {% endblock %}
