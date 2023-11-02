@@ -95,7 +95,7 @@ def addmembers(request):
                     obj=dance(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
                     obj.save()
             elif club_name=="finearts" :
-                    obj=fineartsClub(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj=finearts(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
                     obj.save()
             elif club_name=="yoga" :
                     obj=yoga(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
