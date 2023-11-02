@@ -5,6 +5,8 @@ from home.models import *
 from django.contrib import messages
 from datetime import datetime
 from django.db import connection
+from django.db.models import Q
+
 from django.views.decorators.cache import cache_control
 from datetime import datetime
 from datetime import time
@@ -32,9 +34,10 @@ def signin(request):
             login(request,user)
             return redirect('/dashboard')
         else:
+            messages.error(request,"Incorrect Credentials, Try again")
             print("yes")
-            return render(request,"signin.html")
-    return render(request,'signin.html')
+            return render(request,"signin.html",{'messages': messages.get_messages(request)})
+    return render(request,'signin.html',{'messages': messages.get_messages(request)})
 def signout(request):
     logout(request)
     return redirect("/")
@@ -286,10 +289,31 @@ def approvalStatus(request):
                             date = request.POST.get('date')
                             course_code = request.POST.get('course-code')
                             faculty = request.POST.get('faculty')
+                            reason = request.POST.get('reason')
+                            query=OnDutyRequest.objects.all()
+                            conditions=[]
+                            if roll_no:
+                                conditions.append(Q(student_roll_no=roll_no))
+                            if date:
+                                conditions.append(Q(date_of_od=date))
+                            if course_code:
+                                conditions.append(Q(course_code=course_code))
+                            if faculty:
+                                conditions.append(Q(faculty_name=faculty))
+                            if reason:
+                                conditions.append(Q(reason=reason))
                             if category=="C":
-                                on_duty_approval_status = OnDutyRequest.objects.filter(student_roll_no=roll_no, date_of_od=date, course_code=course_code, faculty_name=faculty, type_of_club=type, username=username)
+                                conditions.append(Q(type_of_club=type))
+                                conditions.append(Q(username=username))
+                                #on_duty_approval_status = OnDutyRequest.objects.filter(student_roll_no=roll_no, date_of_od=date, course_code=course_code, faculty_name=faculty, type_of_club=type, username=username)
                             elif category=="SC" or category=="FI":
-                                on_duty_approval_status = OnDutyRequest.objects.filter(student_roll_no=roll_no, date_of_od=date, course_code=course_code, faculty_name=faculty, type_of_club=type)
+                                conditions.append(Q(type_of_club=type))
+                                # conditions.append(Q(username=username))
+                                #on_duty_approval_status = OnDutyRequest.objects.filter(student_roll_no=roll_no, date_of_od=date, course_code=course_code, faculty_name=faculty, type_of_club=type)
+                            
+                            if conditions:
+                                query = query.filter(*conditions)
+                            on_duty_approval_status = query.all()
 
                         else:
                             if category=="C":
@@ -447,6 +471,7 @@ def requestOnDuty(request):
                         return redirect('/requestOd')                 
         return render(request,"requestOd.html",{'category':category})
     
+
     
 
 def changePassword(request):
@@ -475,6 +500,7 @@ def addUser(request):
     if request.user.is_anonymous:
         return redirect("/")
     if request.user.is_authenticated:
+        username=request.user.username
         with connection.cursor() as cursor:
             select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
             cursor.execute(select_query)
@@ -484,16 +510,17 @@ def addUser(request):
                 category=result[0][1]
                 if category=="FI":
                     if request.method == 'POST':
-                        username = request.POST['username']
-                        password = request.POST['password']
-                        confirm_password = request.POST['confirm_password']
-                        if password == confirm_password:
+                        club_username = request.POST['username']
+                        club_password = request.POST['password']
+                        club_confirm_password = request.POST['confirm_password']
+                        if club_password == club_confirm_password:
                             # Check if a user with the same username or email already exists
-                            if not User.objects.filter(username=username).exists():
-                                User.objects.create_user(username=username,password=password)
+                            if not User.objects.filter(username=club_username).exists():
+                                User.objects.create_user(username=club_username,password=club_password)
                             return redirect('adduser.html',{"category":category})
                     return render(request, 'adduser.html',{"category":category})
         return render(request, 'adduser.html')
+
 def profile(request):
     if request.user.is_anonymous:
         return redirect("/")
