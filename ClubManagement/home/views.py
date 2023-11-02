@@ -85,7 +85,6 @@ def addmembers(request):
             designation=designation.lower()
             branch=request.POST.get('branch')
             branch=branch.lower()
-           
             club_name=get_club_name(username)
             club_name=club_name[0][0]
             if club_name=="music" :
@@ -261,7 +260,7 @@ def dashboard(request):
         username = request.user.username
         club_name=get_club_name(username)
         club_name=club_name[0][0]
-
+        
         rows=get_all_coordinators(club_name)
         faculty=get_faculty_name(club_name)
         events=get_all_completed_events(club_name)

@@ -148,12 +148,6 @@ def upcomming_events(club_name) :
 
 #********************************don't remove this*********************************************
 
-def get_all_events(club_name) :
-    query="select * from home_Events where club_name=%s order by date,time"
-    with connection.cursor() as cursor:
-        cursor.execute(query,[club_name])
-        rows=cursor.fetchall()
-    return rows[:5][1:]
 
 
     
