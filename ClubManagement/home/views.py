@@ -267,76 +267,8 @@ def dashboard(request):
         events=events[0]
         return render(request,'dashboard.html',{'rows' : rows,'faculty' : faculty,'events' : events,"category":category})
 
-'''def approveRequestOd(request,request_id):
-    if request.user.is_authenticated:
-        username=request.user.username
-        with connection.cursor() as cursor:
-                select_query=f"SELECT CLUB_TYPE,CATEGORY FROM home_clubidentifier where username = '{username}'"
-                cursor.execute(select_query)
-                result = cursor.fetchall()
-                if result:
-                    type=result[0][0]
-                    category=result[0][1]
-                    if category=="SC":
-                        if type=="cultural":
-                            duty_request=OnDutyRequestClubCultural.objects.get(id=request_id)
-                            if duty_request:
-                                on_duty_sc = OnDutyRequestSCCultural(
-                                student_roll_no=duty_request.student_roll_no,
-                                date_of_od=duty_request.date_of_od,
-                                course_code=duty_request.course_code,
-                                faculty_name=duty_request.faculty_name,
-                                reason=duty_request.reason)
-                                on_duty_sc.save()
-                                duty_request.delete()
-                                return 
-                        elif type=="technical":
-                            duty_request=OnDutyRequestClubTechnical.objects.get(id=request_id)
-                            if duty_request:
-                                on_duty_sc = OnDutyRequestSCTechnical(
-                                student_roll_no=duty_request.student_roll_no,
-                                date_of_od=duty_request.date_of_od,
-                                course_code=duty_request.course_code,
-                                faculty_name=duty_request.faculty_name,
-                                reason=duty_request.reason)
-                                on_duty_sc.save()
-                                duty_request.delete()
-                                return 
-                        elif type=="sports":
-                            duty_request=OnDutyRequestClubSports.objects.get(id=request_id)
-                            if duty_request:
-                                on_duty_sc = OnDutyRequestSCSports(
-                                student_roll_no=duty_request.student_roll_no,
-                                date_of_od=duty_request.date_of_od,
-                                course_code=duty_request.course_code,
-                                faculty_name=duty_request.faculty_name,
-                                reason=duty_request.reason)
-                                on_duty_sc.save()
-                                duty_request.delete()
-                                return 
-                    elif category=="FI":
-                        if type=="cultural":
-                            duty_request=OnDutyRequestSCCultural.objects.get(id=request_id)
-                            if duty_request:
-                                duty_request.delete()
-                                return 
-                        elif type=="technical":
-                            duty_request=OnDutyRequestSCTechnical.objects.get(id=request_id)
-                            if duty_request:
-                                duty_request.delete()
-                                return 
-                        elif type=="sports":
-                            duty_request=OnDutyRequestSCSports.objects.get(id=request_id)
-                            if duty_request:
-                                duty_request.delete()
-                                return 
-                else:
-                    return
-    else:
-        return'''
 
 def approvalStatus(request):
-    print("inside approval status")
     if request.user.is_anonymous:
         return redirect("/")
     if request.user.is_authenticated:
@@ -363,10 +295,6 @@ def approvalStatus(request):
                             if category=="C":
                                 print("inside C")
                                 on_duty_approval_status = OnDutyRequest.objects.filter(type_of_club=type,username=username)
-                                # if on_duty_approval_status.exists():
-                                #     print("not empty")
-                                # else:
-                                #     print("emtpy")
                             elif category=="SC" or category=="FI":
                                 on_duty_approval_status = OnDutyRequest.objects.filter(type_of_club=type)
                     except OnDutyRequest.DoesNotExist:
@@ -393,49 +321,15 @@ def approve(request,request_id=None):
                                 od_object = OnDutyRequest.objects.get(id=request_id)
                                 od_object.status="PFI"
                                 od_object.save()
-                                # approveRequestOd(request,request_id)
                                 on_duty_requests = OnDutyRequest.objects.filter(type_of_club=type,status="PSC")
-                                # if type=="cultural":
-                                #     on_duty_requests = OnDutyRequestClubSports.objects.all()   
-                                # elif type=="technical":
-                                #     on_duty_requests = OnDutyRequestClubTechnical.objects.all()  
-                                # elif type=="sports":
-                                #     on_duty_requests = OnDutyRequestClubSports.objects.all() 
                             elif category=="FI":
                                 od_object = OnDutyRequest.objects.get(id=request_id)
                                 od_object.status="AP"
                                 od_object.save()
                                 on_duty_requests = OnDutyRequest.objects.filter(type_of_club=type,status="PFI")
-                                # approveRequestOd(request,request_id)
-                                # if type=="cultural":
-                                #     on_duty_requests = OnDutyRequestSCCultural.objects.all()
-                                # elif type=="technical":
-                                #     on_duty_requests = OnDutyRequestSCTechnical.objects.all()
-                                # elif type=="sports":
-                                #     on_duty_requests = OnDutyRequestSCCultural.objects.all()
-                            return render(request, "approval.html", {'on_duty_requests': on_duty_requests,'category':category})
-                        # elif category=="SC" and type=="cultural":
-                        #     #display request list of cultural from clubs
-                        #     # print("inside sc and cultural")
-                        #     # on_duty_requests = OnDutyRequestClubCultural.objects.get()
-                        #     on_duty_requests = OnDutyRequest.objects.get(type_of_club=type,status="PSC")
-                        # elif category=="SC" and type=="technical":
-                        #     #display request list of technical from clubs
-                        #     on_duty_requests = OnDutyRequestClubTechnical.objects.all()
-                        # elif category=="SC" and type=="sports":
-                        #     #display request list of sports from clubs
-                        #     on_duty_requests = OnDutyRequestClubSports.objects.all()
-                        # elif category=="FI" and type=="cultural":
-                        #     #display request list of sports from sc
-                        #     on_duty_requests = OnDutyRequestSCCultural.objects.all()
-                        # elif category=="FI" and type=="technical":
-                        #     #display request list of sports from sc
-                        #     on_duty_requests = OnDutyRequestSCTechnical.objects.all()
-                        # elif category=="FI" and type=="sports":
-                        #     #display request list of sports from sc
-                        #     on_duty_requests = OnDutyRequestSCCultural.objects.all()
-                        
 
+                            return render(request, "approval.html", {'on_duty_requests': on_duty_requests,'category':category})
+                        
                         elif category=="SC":
                             on_duty_requests = OnDutyRequest.objects.filter(type_of_club=type,status="PSC")
                         elif category=="FI":

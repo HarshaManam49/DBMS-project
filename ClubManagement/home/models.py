@@ -174,15 +174,6 @@ def get_all_completed_events(club_name) :
 
 
 
-
-
-
-
-
-
-
-
-
 # Create your models here.
 class Contact(models.Model):
     name = models.CharField(max_length=122)
@@ -232,20 +223,6 @@ class RequestOnDuty(models.Model) :
             rows=cursor.fetchall()
         return rows
 
-
-# class OnDutyRequestSC(models.Model):
-#     student_roll_no=models.CharField(max_length=6)
-#     date_of_od=models.DateField()
-#     course_code=models.CharField(max_length=7)
-#     faculty_name=models.TextField(max_length=1000)
-#     reason=models.CharField(max_length=122)
-#     choices=[
-#         ("cultural","cultural"),
-#         ("technical","technical"),
-#         ("sports","sports")
-#     ]
-#     type_of_club=models.CharField(max_length=122,choices=choices)
-
 class OnDutyRequest(models.Model):
     student_roll_no=models.CharField(max_length=6)
     date_of_od=models.DateField()
@@ -265,94 +242,6 @@ class OnDutyRequest(models.Model):
     ]
     status=models.CharField(max_length=3,choices=choices_of_status,default="PSC")
     username=models.CharField(max_length=122,default="user@user")
-
-
-# class OnDutyRequestFacultyIncharge(models.Model):
-#     student_roll_no=models.CharField(max_length=6)
-#     date_of_od=models.DateField()
-#     course_code=models.CharField(max_length=7)
-#     faculty_name=models.TextField(max_length=1000)
-#     reason=models.CharField(max_length=122)
-#     choices=[
-#         ("cultural","cultural"),
-#         ("technical","technical"),
-#         ("sports","sports")
-#     ]
-#     type_of_club=models.CharField(max_length=122,choices=choices)
-
-class OnDutyRequestSCCultural(models.Model):
-    student_roll_no=models.CharField(max_length=6)
-    date_of_od=models.DateField()
-    course_code=models.CharField(max_length=7)
-    faculty_name=models.TextField(max_length=1000)
-    reason=models.CharField(max_length=122)
-    # choices=[
-    #     ("cultural","cultural"),
-    #     ("technical","technical"),
-    #     ("sports","sports")
-    # ]
-    # type_of_club=models.CharField(max_length=122,choices=choices)
-class OnDutyRequestSCTechnical(models.Model):
-    student_roll_no=models.CharField(max_length=6)
-    date_of_od=models.DateField()
-    course_code=models.CharField(max_length=7)
-    faculty_name=models.TextField(max_length=1000)
-    reason=models.CharField(max_length=122)
-    # choices=[
-    #     ("cultural","cultural"),
-    #     ("technical","technical"),
-    #     ("sports","sports")
-    # ]
-    # type_of_club=models.CharField(max_length=122,choices=choices)
-class OnDutyRequestSCSports(models.Model):
-    student_roll_no=models.CharField(max_length=6)
-    date_of_od=models.DateField()
-    course_code=models.CharField(max_length=7)
-    faculty_name=models.TextField(max_length=1000)
-    reason=models.CharField(max_length=122)
-    # choices=[
-    #     ("cultural","cultural"),
-    #     ("technical","technical"),
-    #     ("sports","sports")
-    # ]
-    # type_of_club=models.CharField(max_length=122,choices=choices)
-
-class OnDutyRequestClubCultural(models.Model):
-    student_roll_no=models.CharField(max_length=6)
-    date_of_od=models.DateField()
-    course_code=models.CharField(max_length=7)
-    faculty_name=models.CharField(max_length=122)
-    reason=models.CharField(max_length=122)
-    # choices=[
-    #     ("cultural","cultural"),
-    #     ("technical","technical"),
-    #     ("sports","sports")
-    # ]
-    # type_of_club=models.CharField(max_length=122,choices=choices)
-class OnDutyRequestClubTechnical(models.Model):
-    student_roll_no=models.CharField(max_length=6)
-    date_of_od=models.DateField()
-    course_code=models.CharField(max_length=7)
-    faculty_name=models.CharField(max_length=122)
-    reason=models.CharField(max_length=122)
-    # choices=[
-    #     ("cultural","cultural"),
-    #     ("technical","technical"),
-    #     ("sports","sports")
-    # ]
-    # type_of_club=models.CharField(max_length=122,choices=choices)
-class OnDutyRequestClubSports(models.Model):
-    student_roll_no=models.CharField(max_length=6)
-    date_of_od=models.DateField()
-    course_code=models.CharField(max_length=7)
-    faculty_name=models.CharField(max_length=122)
-    reason=models.CharField(max_length=122)
-    # choices=[
-    #     ("cultural","cultural"),
-    #     ("technical","technical"),
-    #     ("sports","sports")
-    # ]
-    # type_of_club=models.CharField(max_length=122,choices=choices)
 
 
 class Events(models.Model) :
