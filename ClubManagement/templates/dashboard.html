@@ -23,11 +23,57 @@
 .clubcoor {
     grid-row: span 2;
     border: 2px solid #171616;
+    display:flex;
+    flex-direction:column;
+}
+
+p
+{
+    margin-left:2%;
+    font-weight:500;
+    font-size:1.5vw;
 }
 
 .clubfac,
 .recentevent {
     border: 2px solid #171616;
+    display:flex;
+    flex-direction:column;
+}
+
+.cfitem
+{
+    align-self:center;
+}
+
+.outer
+{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+}
+
+.outerr
+{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+}
+
+.inner
+{
+    margin:2%;
+    font-size:1.25vw;
+    font-weight:400;
+}
+
+.phello
+{
+    font-size:3vw;
 }
 
 {% endblock %}
@@ -43,10 +89,35 @@
 
 {% block body %}
     
-    <div class="dash1"> 
-        <div class="hello" href="#"> Hello!ABC Club</div>
-        <div class="clubcoor" href="#">Club Coordinators:</div>
-        <div class="clubfac" href="#">Club Faculty Incharge:</div>
-        <div class="recentevent" href="#">Recent Events:</div>
+<div class="dash1"> 
+    <div class="hello" >
+        <p class="phello">Hello! </br>ABC Club</p>
     </div>
+    <div class="clubcoor">
+        <p>Club Coordinators:</p>
+        <div class="outer">
+            {% for  i in rows %}
+                <div class="inner">
+                    {%for j in i%}
+                        {{j}}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="clubfac">
+        <p>Club Faculty Incharge:</p>
+       <p class="cfitem " style="font-weight:450;">{{faculty}}</p>
+    </div>
+    <div class="recentevent">
+        <p>Recent Events:</p>
+        <div class="outerr">
+            {% for  i in events %}
+                <div class="inner">
+                    {{i}}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -3,7 +3,7 @@
 
 {% block style %}
 
-.cbtimeline
+.elists
 {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -16,7 +16,7 @@
     padding:3%;
 }
 
-.cbhello
+.ehello
 {
     grid-column:span 2;
     border: 2px solid #171616;
@@ -25,15 +25,54 @@
     font-size:3vw;
 }
 
-.cbtable
+.etable
+{
+    grid-column:span 2;
+    display:grid;
+    grid-template-rows:3fr 1fr;
+}
+
+.eha
+{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+}
+
+.eclub
 {
     grid-column:span 2;
     display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
     align-items:center;
-    justify-content:space-around;
+}
+
+.eclubname
+{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:500;
     font-size:3vw;
 }
 
+.eha2
+{
+    display:flex;
+
+}
+
+a 
+{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.p-2
+{
+    font-size:1.25vw;
+}
 {% endblock style %}
 
 {%block approval%}
@@ -44,13 +83,31 @@
 
 {% block body %}
 
-    <div class="cbtimeline">
-        <div class="cbhello">
-           <img class="p-3" style="width:7vw; height:auto;" src="{% static '3_dashtime.png'%}" alt="I">
+    <div class="elists">
+        <div class="ehello">
+           <img class="p-3" style="width:7vw; height:auto;" src="{% static '4_events.png'%}" alt="I">
             Club Timeline
         </div>
-        <div class="cbtable">
-            Media Club
+        <div class="etable">
+            <div class="eha">
+                <div class="eclubname">
+                    Media Club
+                </div>
+                <div class="eclub">
+                    {% for  i in rows %}
+                        <div class="eha2">
+                            {%for j in i%}
+                                <div class="p-2">
+                                    {{j}}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+            </div>
         </div>
     </div>
+
+    
 {% endblock body %}

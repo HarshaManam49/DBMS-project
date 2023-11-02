@@ -2,36 +2,73 @@
 {% load static %}
 
 {% block style %}
-
-.amembers
-{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.rod {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 0.25fr 1fr;
-    height:90vh;
+    height: 90vh;
     grid-gap: 18px;
     background-image: url("{% static 'Clubbg.png' %}");
-    background-size:cover;
+    background-size: cover;
     background-repeat: no-repeat;
-    padding:3%;
+    padding: 3%;
 }
 
-.ahello
-{
-    grid-column:span 2;
+.rhello {
+    grid-column: span 2;
     border: 2px solid #171616;
-    display:flex;
-    align-items:center;
-    font-size:3vw;
+    display: flex;
+    align-items: center;
+    font-size: 3vw;
 }
 
-.atable
-{
-    grid-column:span 2;
+.rtable {
+    grid-column: span 2;
     border: 2px solid #171616;
-    display:flex;
-    align-items:end;
-    justify-content:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.r-mem-table {
+    margin-bottom: auto;
+}
+
+{% comment %} #r-member-form {
+    display: flex;
+} {% endcomment %}
+
+#member-roll-no,
+#member-date,
+#member-course-code,
+#member-faculty,
+#member-reason {
+    margin-right: 10px;
+}
+
+#r-member-table td,th {
+    padding-left:0.9vw;
+    padding-right:0.9vw;
+}
+
+#submit-btn {
+    margin-top: 10px;
+}
+
+#submit-success {
+    color: green;
+    display: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+td
+{
+    text-align:center; 
 }
 
 {% endblock style %}
@@ -43,18 +80,86 @@
 {%endblock%}
 
 {% block body %}
+<div class="rod">
+    <div class="rhello">
+        <img class="p-3" style="width:7vw; height:auto;" src="{% static '4_events.png'%}" alt="I">
+        Add Members
+    </div>
+    <div class="rtable">
+        <div class="r-mem-table table-responsive">
+            <form method='post' action='/addmembers'>
+                {% csrf_token %}
+                <table id="r-member-table" class="r-table">
+                    <thead>
+                        <tr>
+                            <th>ROLL NO</th>
+                            <th>NAME</th>
+                            <th>JOIN YEAR</th>
+                            <th>BRANCH</th>
+                            <th>POSITION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows for member information will be added dynamically -->
+                        <tr id="st">
+                            <td><input type="text" name='roll' placeholder="ROll"></td>
+                            <td><input type="text" name="name" placeholder="Name"></td>
+                            <td><input type="text" name="joining_year" placeholder="Join Year"></td>
+                            <td><input type="text" name="branch" placeholder="Branch"></td>
+                            <td><input type="text" name="designation" placeholder="Position"></td>
+                            <td><button class="btn btn-danger rounded-pill" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <div class="amembers">
-        <div class="ahello">
-           <img class="p-3" style="width:7vw; height:auto;" src="{% static '2_mem.png'%}" alt="I">
-            Add Members
-        </div>
-        <div class="atable">
-            <a href="/addmembers">
-                <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
-                    Add Members
+                <div class="d-flex justify-content-center mt-3">
+                    <button type="submit" class="btn btn-primary rounded-pill" id="login-btn">
+                        Submit
+                    </button>
+                </div>
+            </form>
+                <button type="button" onclick="addNewRow()" class="btn btn-primary rounded-pill ml-3" id="login-btn">
+                   Add Members
                 </button>
-            </a>
+            
         </div>
     </div>
+
+    <script>
+        // Create a new div element
+        function addNewRow() {
+            var table = document.getElementById('r-member-table');
+            var newRow = table.insertRow(table.rows.length);
+            
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+            var cell6 = newRow.insertCell(5);
+
+            cell1.innerHTML = '<input type="text" name="roll" placeholder="Name">';
+            cell2.innerHTML = '<input type="text" name="name" placeholder="dd-mm-yyyy">';
+            cell3.innerHTML = '<input type="text" name="joining_year" placeholder="time">';
+            cell5.innerHTML = '<input type="text" name="branch" placeholder="status">';
+            cell4.innerHTML = '<input type="text" name="designation" placeholder="venue">';
+            cell6.innerHTML = '<button type="button" class="btn btn-danger rounded-pill" onclick="deleteRow(this)">Delete</button>';  
+        }
+
+        function deleteRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+
+    {% comment %} {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show my-0" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+     {% endfor %}
+    {% endif %} {% endcomment %}
 {% endblock body %}

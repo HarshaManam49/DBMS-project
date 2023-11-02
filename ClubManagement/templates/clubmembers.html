@@ -30,9 +30,32 @@
     grid-column:span 2;
     border: 2px solid #171616;
     display:flex;
-    align-items:end;
+    flex-direction:column;
+    align-items:center;
     justify-content:center;
 }
+
+.ct
+{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+}
+
+.ctitem
+{
+    display:flex;
+    flex-direction:column;
+    align-items:space-evenly;
+}
+
+table
+{
+    width:75%
+}
+
 
 {% endblock style %}
 
@@ -50,6 +73,35 @@
             Club Members
         </div>
         <div class="ctable">
+            <div class="ct table-responsive">
+                <table id="r-member-table" class="r-table">
+                    <thead>
+                        <tr>
+                            <th>ROLL NO</th>
+                            <th>NAME</th>
+                            <th>BRANCH</th>
+                            <th>YEAR</th>
+                            <th>POSITION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows for member information will be added dynamically -->
+                        {% for  obj in objs %}
+                        {% comment %} <tr>
+                            {%for j in i%}
+                               <td>{{j}}</td>
+                            {% endfor %}
+                        </tr> {% endcomment %}
+                        {{obj.roll}}
+                        {{obj.name}}
+                        {{obj.branch}}
+                        {{obj.joining_year}}
+                        {{obj.designation}}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
             <a href="/addmembers">
                 <button type="button" class="btn btn-primary mb-5 rounded-pill" id="login-btn">
                     Add Members

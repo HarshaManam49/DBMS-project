@@ -5,8 +5,18 @@ from home.models import *
 from django.contrib import messages
 from datetime import datetime
 from django.db import connection
-
 from django.views.decorators.cache import cache_control
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+from .models import Events
+from .models import  Contact,upcomming_events,get_all_member,get_club_name,is_slot_free,update_status_of_events,get_all_events,get_all_completed_events
+from .models import  get_all_coordinators,get_faculty_name
+from .models import music,dance,finearts,yoga,ebsb,literaryanddebating
+from .models import media,photography,netsec,webdev,competitivecoding,iot,robotics,circopt,science,volleyball,cricket
+from .models import badminton,tabletennis,basketball,carrom,chess,kabbadi,athleticstrack,athleticsfield,football,throwball
+
+
 
 
 # Create your views here.
@@ -40,7 +50,9 @@ def contact(request):
     return render(request,'contact.html')
 def about(request):
     return render(request,'about.html')
+
 def clubmembers(request):
+    objs=[]
     if request.user.is_authenticated:
         username=request.user.username
         with connection.cursor() as cursor:
@@ -49,7 +61,11 @@ def clubmembers(request):
                 result = cursor.fetchall()
                 if result:
                     category=result[0][1]
-        return render(request,'clubmembers.html',{'category':category})
+        club_name=get_club_name(username)
+        club_name=club_name[0][0]
+        objs=get_all_member(club_name)
+        return render(request,'clubmembers.html',{'objs' : objs,'category':category})
+
 def addmembers(request):
     if request.user.is_authenticated:
         username=request.user.username
@@ -59,7 +75,103 @@ def addmembers(request):
                 result = cursor.fetchall()
                 if result:
                     category=result[0][1]
+        if request.method=="POST" :
+            roll=request.POST.get('roll')
+            roll=int(roll)
+            name=request.POST.get('name') 
+            joining_year=request.POST.get('joining_year')
+            joining_year=int(joining_year)
+            designation=request.POST.get('designation')
+            designation=designation.lower()
+            branch=request.POST.get('branch')
+            branch=branch.lower()
+           
+            club_name=get_club_name(username)
+            club_name=club_name[0][0]
+            if club_name=="music" :
+                    obj=music(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="dance" :
+                    obj=dance(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="finearts" :
+                    obj=fineartsClub(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="yoga" :
+                    obj=yoga(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="ebsb" :
+                    obj=ebsb(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="literaryanddebating" :
+                    obj=literaryanddebating(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="media" :
+                    obj=media(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="photography" :
+                    obj=photography(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="netsec" :
+                    obj=netsec(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="webdev" :
+                    obj=webdev(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="competitivecoding" :
+                    obj=competitivecoding(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="iot" :
+                    obj=iot(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="robotics" :
+                    obj=robotics(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="circopt" :
+                    obj=circopt(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="science" :
+                    obj=science(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="volleyball" :
+                    obj=volleyball(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="cricket" :
+                    obj=cricket(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="badminton" :
+                    obj=badminton(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="tabletennis" :
+                    obj=tabletennis(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="basketball" :
+                    obj=basketball(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="carrom" :
+                    obj=carrom(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="chess" :
+                    obj=chess(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="kabbadi" :
+                    obj=kabbadi(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="athleticstrack" :
+                    obj=athleticstrack(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="athleticsfield" :
+                    obj=athleticsfield(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="football" :
+                    obj=football(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            elif club_name=="throwball" :
+                    obj=throwball(roll=roll,name=name,joining_year=joining_year,designation=designation,branch=branch)
+                    obj.save()
+            messages.success(request,"Added Successfully")
         return render(request,'addmembers.html',{'category':category})
+
 def eventslist(request):
     if request.user.is_authenticated:
         username=request.user.username
@@ -69,7 +181,13 @@ def eventslist(request):
                 result = cursor.fetchall()
                 if result:
                     category=result[0][1]
-        return render(request,'eventslist.html',{'category':category})
+        club_name=get_club_name(username)
+        club_name=club_name[0][0]
+        update_status_of_events()
+        events=upcomming_events(club_name)
+        return render(request,'eventslist.html',{'events' : events,'category':category})
+
+        
 def addevents(request):
     if request.user.is_authenticated:
         username=request.user.username
@@ -79,7 +197,36 @@ def addevents(request):
                 result = cursor.fetchall()
                 if result:
                     category=result[0][1]
+        if request.method=="POST" :
+            name=request.POST.get('name')
+            my_date=request.POST.get('date')
+            my_date = datetime.strptime(my_date, '%Y-%m-%d').date()
+            my_time=request.POST.get('time')
+            my_time=my_time.split(':')
+            hours=int(my_time[0])
+            minutes=int(my_time[1])
+            my_time=time(hours,minutes)
+            venue=request.POST.get('venue')
+            status=request.POST.get('status')
+            end_time=request.POST.get('end_time')
+            end_time=end_time.split(':')
+            hours=int(end_time[0])
+            minutes=int(end_time[1])
+            end_time=time(hours,minutes)
+            delta = timedelta(hours=end_time.hour, minutes=end_time.minute) - timedelta(hours=my_time.hour, minutes=my_time.minute)
+            hours, seconds = divmod(delta.total_seconds(), 3600)
+            minutes= seconds // 60
+            duration= time(int(hours), int(minutes))
+            club_name=get_club_name(username)
+            club_name=club_name[0][0]
+            if is_slot_free(my_date,my_time,duration) :
+                obj=Events(name=name,club_name=club_name,date=my_date,time=my_time,duration=duration,endtime=end_time,venue=venue,status=status)
+                obj.save()
+                messages.success(request,"Event Added Successfully")
+            else :
+                messages.warning(request,"Time  Slot Already Occupied")
         return render(request,'addevents.html',{'category':category})
+
 def clubtimeline(request):
     if request.user.is_authenticated:
         username=request.user.username
@@ -89,9 +236,18 @@ def clubtimeline(request):
                 result = cursor.fetchall()
                 if result:
                     category=result[0][1]
-        return render(request,'clubtimeline.html',{'category':category})
+        update_status_of_events()
+        rows=[]
+        club_name=get_club_name(username)
+        club_name=club_name[0][0]
+        rows=get_all_completed_events(club_name)
+        return render(request,'clubtimeline.html',{'rows' : rows,'category':category})
+
 
 def dashboard(request):
+    rows=[]
+    faculty=[]
+    events=[]
     if request.user.is_anonymous:
         return redirect("/index.html")
     if request.user.is_authenticated:
@@ -102,7 +258,15 @@ def dashboard(request):
                 result = cursor.fetchall()
                 if result:
                     category=result[0][1]
-        return render(request,'dashboard.html',{"category":category})
+        username = request.user.username
+        club_name=get_club_name(username)
+        club_name=club_name[0][0]
+
+        rows=get_all_coordinators(club_name)
+        faculty=get_faculty_name(club_name)
+        events=get_all_completed_events(club_name)
+        events=events[0]
+        return render(request,'dashboard.html',{'rows' : rows,'faculty' : faculty,'events' : events,"category":category})
 
 '''def approveRequestOd(request,request_id):
     if request.user.is_authenticated:
